@@ -86,22 +86,24 @@ if run and task:
     c1, c2 = st.columns(2)
     g1 = scores.get("gemini", 5)
     g2 = scores.get("groq", 5)
-    c1.metric("🧠 Analytical Agent Score", scores["gemini"])
-    c2.metric("🎨 Creative Agent Score", scores["groq"])
+    c1.metric("🧠 Analytical Agent Score", g1)
+    c2.metric("🎨 Creative Agent Score", g2)
 
+    # ---- WINNER ----
     # ---- WINNER ----
     # ---- WINNER ----
     st.markdown("## 🏆 Best Agent")
 
-    winner = scores.get("winner", "")
-    winner = winner.lower().strip()
+    winner = scores.get("winner", "").lower().strip()
 
-# fallback logic if winner is missing or invalid
+# fallback logic
     if winner not in ["gemini", "groq"]:
-        if scores["gemini"] > scores["groq"]:
+        if g1 > g2:
             winner = "gemini"
-        elif scores["groq"] > scores["gemini"]:
+        elif g2 > g1:
             winner = "groq"
+        else:
+            winner = "tie"
 
     if winner == "gemini":
         st.success("✨ Gemini performs best for this task")
@@ -109,7 +111,8 @@ if run and task:
         st.success("⚡ LLaMA3 performs best for this task")
     else:
         st.warning("⚠️ Could not determine a clear winner")
-    st.info(scores["reason"])
+    
+    st.info(scores.get("reason", "No explanation available"))
 
     # ---- PERFORMANCE BAR ----
     st.markdown("### 🔥 Performance Score")
