@@ -5,7 +5,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
+# --- Wikipedia API ---
+def fetch_context(query):
+    try:
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{query}"
+        res = requests.get(url)
+        data = res.json()
+        return data.get("extract", "")
+    except:
+        return ""
 # --- Agent 1 (Analytical) ---
 def run_gemini(prompt):
     try:
