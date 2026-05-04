@@ -91,7 +91,7 @@ def run_groq(prompt):
 Use the following context if relevant:
 {context}
 
-Give a short, creative, engaging response.
+Give a short, creative,structured, detailed, engaging response.
 
 Task:
 {prompt}
