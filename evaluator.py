@@ -30,8 +30,8 @@ def evaluate(task, gemini, groq):
 
     # fallback (never show 0 again)
     return {
-        "gemini": 7,
-        "groq": 7,
-        "winner": "gemini",
+        "gemini": 0,
+        "groq": 0,
+        "winner": "none",
         "reason": "Fallback scoring due to parsing issue"
     }
