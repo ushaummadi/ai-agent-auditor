@@ -1,10 +1,12 @@
 import os
+import requests
 from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
 
 # ---------- BETTER TOPIC EXTRACTION ----------
 def extract_topic(prompt):
@@ -23,40 +25,81 @@ def extract_topic(prompt):
     topic = "_".join(keywords[:3])
 
     return topic if topic else "Artificial_intelligence"
-# --- Wikipedia API ---
-def fetch_context(query):
+
+
+# ---------- WIKIPEDIA API ----------
+def fetch_context(prompt):
     try:
-        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{query}"
+        topic = extract_topic(prompt)
+
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{topic}"
         res = requests.get(url)
+
+        if res.status_code != 200:
+            return ""
+
         data = res.json()
         return data.get("extract", "")
-    except:
+
+    except Exception:
         return ""
-# --- Agent 1 (Analytical) ---
+
+
+# ---------- AGENT 1 (ANALYTICAL) ----------
 def run_gemini(prompt):
     try:
+        context = fetch_context(prompt)
+
+        if not context:
+            context = "No external data available."
+
         res = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="gemma2-9b-it",
             messages=[{
                 "role": "user",
-                "content": f"Write a detailed, structured, factual response:\n{prompt}"
+                "content": f"""
+Use the following context if relevant:
+{context}
+
+Give a structured, detailed, high-quality answer.
+
+Task:
+{prompt}
+"""
             }]
         )
+
         return res.choices[0].message.content
+
     except Exception as e:
         return f"Agent 1 Error: {str(e)}"
 
 
-# --- Agent 2 (Creative) ---
+# ---------- AGENT 2 (CREATIVE) ----------
 def run_groq(prompt):
     try:
+        context = fetch_context(prompt)
+
+        if not context:
+            context = "No external data available."
+
         res = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[{
                 "role": "user",
-                "content": f"Write a short,detailed, creative, engaging answer:\n{prompt}"
+                "content": f"""
+Use the following context if relevant:
+{context}
+
+Give a short, creative, engaging response.
+
+Task:
+{prompt}
+"""
             }]
         )
+
         return res.choices[0].message.content
+
     except Exception as e:
         return f"Agent 2 Error: {str(e)}"
