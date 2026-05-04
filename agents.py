@@ -5,6 +5,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+# ---------- BETTER TOPIC EXTRACTION ----------
+def extract_topic(prompt):
+    """
+    Extract meaningful keywords from user prompt
+    """
+    stopwords = {
+        "write", "create", "generate", "make", "tell", "explain",
+        "what", "is", "a", "an", "the", "for", "about", "of", "to"
+    }
+
+    words = prompt.lower().split()
+    keywords = [w for w in words if w not in stopwords]
+
+    # Take first 2–3 meaningful words
+    topic = "_".join(keywords[:3])
+
+    return topic if topic else "Artificial_intelligence"
 # --- Wikipedia API ---
 def fetch_context(query):
     try:
