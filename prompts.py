@@ -17,6 +17,8 @@ You MUST NOT favor any agent.
 Strict rules:
 - Score based only on quality
 - Do NOT prefer longer answers
+- Penalize unnecessary length
+- Reward conciseness if task requires it
 - Judge based on how well the response fits the task
 - Do NOT prefer a specific writing style
 - Be fair and critical
