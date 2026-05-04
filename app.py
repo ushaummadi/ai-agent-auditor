@@ -113,7 +113,18 @@ if run and task:
     # ---- PERFORMANCE BAR ----
     st.markdown("### 🔥 Performance Score")
 
-    best_score = max(scores["gemini"], scores["groq"]) / 10
+    try:
+        g1 = float(scores.get("gemini", 0))
+        g2 = float(scores.get("groq", 0))
+
+        best_score = max(g1, g2) / 10
+
+    # clamp value between 0 and 1
+        best_score = max(0.0, min(1.0, best_score))
+
+    except:
+        best_score = 0.5  # fallback safe value
+
     st.progress(best_score)
 
     # ---- RAW OUTPUT (PRO FEATURE) ----
