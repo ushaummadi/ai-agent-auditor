@@ -84,7 +84,8 @@ if run and task:
     st.markdown("## 📊 Performance Comparison")
 
     c1, c2 = st.columns(2)
-
+    g1 = scores.get("gemini", 5)
+    g2 = scores.get("groq", 5)
     c1.metric("🧠 Analytical Agent Score", scores["gemini"])
     c2.metric("🎨 Creative Agent Score", scores["groq"])
 
