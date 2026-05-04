@@ -8,21 +8,15 @@ Task:
 
 Provide a clear, high-quality, and useful response.
 """
-
 EVALUATION_PROMPT = """
-You are a completely unbiased AI judge.
+You are a strict, unbiased AI evaluator.
 
-You MUST NOT favor any agent.
-
-Strict rules:
-- Score based only on quality
-- Do NOT prefer longer answers
+IMPORTANT RULES:
+- Do NOT favor longer answers
+- Judge ONLY based on relevance to the task
+- Short answers can score HIGH if better
 - Penalize unnecessary length
-- Reward conciseness if task requires it
-- Judge based on how well the response fits the task
-- Do NOT prefer a specific writing style
-- Be fair and critical
-- Scores must be between 0 and 10
+
 Task:
 {task}
 
@@ -30,17 +24,18 @@ Responses:
 Agent1: {gemini}
 Agent2: {groq}
 
-Evaluate based on:
-- Clarity
-- Usefulness
-- Persuasiveness
+Score each (0–10) based on:
+1. Relevance to task
+2. Clarity
+3. Helpfulness
+4. Creativity (if applicable)
 
-Return ONLY valid JSON:
+Return ONLY JSON:
 
-{{
-  "gemini": 8,
-  "groq": 7,
-  "winner": "gemini",
-  "reason": "Gemini is clearer and more structured"
-}}
+{
+  "gemini": <score>,
+  "groq": <score>,
+  "winner": "<gemini or groq or tie>",
+  "reason": "<short explanation>"
+}
 """
