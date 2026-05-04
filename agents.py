@@ -36,7 +36,7 @@ def run_groq(prompt):
             model="llama-3.1-8b-instant",
             messages=[{
                 "role": "user",
-                "content": f"Write a detailed, structured, factual response:\n{prompt}"
+                "content": f"Write a short,detailed, creative, engaging answer:\n{prompt}"
             }]
         )
         return res.choices[0].message.content
